@@ -373,6 +373,12 @@ func (ns *NodeServer) mount(
 		return status.Error(codes.Internal, err.Error())
 	}
 
+	if err = os.Chmod(stagingTargetPath, 0o777); err != nil {
+		log.ErrorLog(ctx, "failed to set permissions on %s: %v", stagingTargetPath, err)
+
+		return status.Error(codes.Internal, err.Error())
+	}
+
 	defer func() {
 		if err == nil {
 			return
